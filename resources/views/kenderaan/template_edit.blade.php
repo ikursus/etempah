@@ -4,7 +4,8 @@
 
   <form method="POST" action="{{ route('kenderaan.update', [1]) }}">
     @csrf
-
+    <input type="hidden" name="_method" value="PATCH">
+    
     <div class="form-group row">
         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('MODEL') }}</label>
 

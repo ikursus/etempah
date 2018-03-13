@@ -47,7 +47,16 @@ class KenderaanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Dapatkan semua data dari borang
+        // $data = $request->all();
+        // Dapatkan 1 data sahaja dari maklumat yang dikirim
+        // $data = $request->input('no_plat');
+        // Dapatkan data yang diperlukan sahaja
+        // $data = $request->only('status', 'no_plat');
+        // Dapatkan semua data KECUALI yang dinyatakan
+        $data = $request->except('no_plat');
+
+        return $data;
     }
 
     /**
@@ -83,7 +92,9 @@ class KenderaanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $data = $request->all();
+
+      return $data;
     }
 
     /**
