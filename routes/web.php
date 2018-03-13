@@ -9,7 +9,9 @@ Auth::routes();
 Route::get('/dashboard', 'DashboardController@panel');
 Route::get('/home', 'HomeController@index')->name('home');
 
-// Route untuk pengurusan Users
+/*
+ * Route untuk pengurusan Users
+ */
 // Route memaparkan senarai users
 Route::get('/users', 'UsersController@index')->name('users.index');
 // Route memaparkan borang tambah user baru
@@ -22,3 +24,19 @@ Route::get('/users/{id}/edit', 'UsersController@edit')->name('users.edit');
 Route::patch('/users/{id}/edit', 'UsersController@update')->name('users.update');
 // Route menghapuskan maklumat user
 Route::delete('/users/{id}', 'UsersController@destroy')->name('users.destroy');
+
+/*
+ * Route untuk pengurusan kenderaan
+ */
+// Route memaparkan senarai users
+Route::get('/kenderaan', 'KenderaanController@index')->name('kenderaan.index');
+// Route memaparkan borang tambah user baru
+Route::get('/kenderaan/add', 'KenderaanController@create')->name('kenderaan.create');
+// Route untuk memproses borang tambah user baru
+Route::post('/kenderaan/add', 'KenderaanController@store')->name('kenderaan.store');
+// Route memaparkan borang edit user
+Route::get('/kenderaan/{id}/edit', 'KenderaanController@edit')->name('kenderaan.edit');
+// Route memproses borang kemaskini user
+Route::patch('/kenderaan/{id}/edit', 'KenderaanController@update')->name('kenderaan.update');
+// Route menghapuskan maklumat user
+Route::delete('/kenderaan/{id}', 'KenderaanController@destroy')->name('kenderaan.destroy');
