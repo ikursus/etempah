@@ -23,11 +23,25 @@
         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nama') }}</label>
 
         <div class="col-md-6">
-            <input id="name" type="text" class="form-control{{ $errors->has('nama') ? ' is-invalid' : '' }}" name="name" value="{{ old('nama') }}" required autofocus>
+            <input id="name" type="text" class="form-control{{ $errors->has('nama') ? ' is-invalid' : '' }}" name="nama" value="{{ old('nama') }}" required autofocus>
 
             @if ($errors->has('nama'))
                 <span class="invalid-feedback">
                     <strong>{{ $errors->first('nama') }}</strong>
+                </span>
+            @endif
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="no_kp" class="col-md-4 col-form-label text-md-right">{{ __('No KP') }}</label>
+
+        <div class="col-md-6">
+            <input id="no_kp" type="text" class="form-control{{ $errors->has('no_kp') ? ' is-invalid' : '' }}" name="no_kp" value="{{ old('no_kp') }}" required autofocus>
+
+            @if ($errors->has('no_kp'))
+                <span class="invalid-feedback">
+                    <strong>{{ $errors->first('no_kp') }}</strong>
                 </span>
             @endif
         </div>
@@ -90,7 +104,7 @@
         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Status') }}</label>
 
         <div class="col-md-6">
-            <select name="role" class="form-control">
+            <select name="status" class="form-control">
               <option value="pending">Pending</option>
               <option value="active">Active</option>
               <option value="banned">Banned</option>

@@ -47,14 +47,22 @@ class KenderaanController extends Controller
      */
     public function store(Request $request)
     {
+        // Form validation
+        // $this->validate($request, []);
+        $request->validate([
+          'jenis' => 'required|min:3',
+          'model' => 'required',
+          'status' => 'required|in:available,booked'
+        ]);
+
         // Dapatkan semua data dari borang
-        // $data = $request->all();
+        $data = $request->all();
         // Dapatkan 1 data sahaja dari maklumat yang dikirim
         // $data = $request->input('no_plat');
         // Dapatkan data yang diperlukan sahaja
         // $data = $request->only('status', 'no_plat');
         // Dapatkan semua data KECUALI yang dinyatakan
-        $data = $request->except('no_plat');
+        // $data = $request->except('no_plat');
 
         return $data;
     }
