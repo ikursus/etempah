@@ -4,7 +4,7 @@
 
   @include('layouts/alerts')
 
-  <form method="POST" action="{{ route('kenderaan.store') }}">
+  <form method="POST" action="{{ route('kenderaan.store') }}" enctype="multipart/form-data">
 
     {{ csrf_field() }}
     @csrf
@@ -64,6 +64,20 @@
             @if ($errors->has('status'))
                 <span class="invalid-feedback">
                     <strong>{{ $errors->first('status') }}</strong>
+                </span>
+            @endif
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('GAMBAR') }}</label>
+
+        <div class="col-md-6">
+            <input type="file" name="gambar">
+
+            @if ($errors->has('gambar'))
+                <span class="invalid-feedback">
+                    <strong>{{ $errors->first('gambar') }}</strong>
                 </span>
             @endif
         </div>

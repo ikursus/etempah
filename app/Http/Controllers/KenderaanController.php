@@ -31,16 +31,64 @@ class KenderaanController extends Controller
 
       // Return result menerusi DataTables
       return DataTables::of( $senarai_kenderaan )
+      ->editColumn('gambar', function($kenderaan) {
+        // Semak jika wujudnya rekod gambar dalam table kenderaan
+        if ( $kenderaan->gambar )
+        {
+          // Jika wujud gambar, paparkan gambar
+          return '<img src="/uploads/'. $kenderaan->gambar .'" style="max-width: 300px">';
+        }
+        else
+        {
+          return 'Tiada Gambar';
+        }
+
+      })
       ->addColumn('tindakan', function($kenderaan) {
 
         return '
 
           <a href="'. route('kenderaan.edit', ['id' => $kenderaan->id ]) .'" class="btn btn-sm btn-info">Edit</a>
 
+          <!-- Button trigger modal delete -->
+          <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-delete-'. $kenderaan->id .'">
+            Delete
+          </button>
+
+
+          <!-- Modal delete -->
+          <form method="POST" action="'. route('kenderaan.destroy', ['id' => $kenderaan->id] ) .'">
+            ' . csrf_field() . '
+            <input type="hidden" name="_method" value="DELETE">
+
+          <div class="modal fade" id="modal-delete-'. $kenderaan->id .'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Pengesahan Delete Maklumat '. $kenderaan->no_plat .'</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+
+                  <p>Adakah anda bersetuju untuk menghapuskan akaun '. $kenderaan->no_plat .'?
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          </form>
+
         ';
 
       })
-      ->rawColumns(['tindakan'])
+      ->rawColumns(['gambar','tindakan'])
       ->make(true);
     }
 
@@ -74,8 +122,22 @@ class KenderaanController extends Controller
           'status' => 'required|in:available,booked'
         ]);
 
-        // Dapatkan semua data dari borang
-        $data = $request->all();
+        // Dapatkan semua rekod data KECUALI fail gambar
+        $data = $request->except('gambar');
+        // Buat semakan adakah wujud fail gambar
+        if( $request->hasFile('gambar') )
+        {
+          // Dapatkan maklumat fail gambar
+          $gambar = $request->file('gambar');
+          // Dapatkan NAMA fail gambar tersebut
+          $nama_gambar = $gambar->getClientOriginalName();
+          // Berikan nama baru fail gambar dengan adanya timestamp
+          $nama_baru = date('Y-m-dH-i-S').'-'.$nama_gambar;
+          // Upload gambar ke folder simpanan gambar bernama uploads yang berada di dalam public
+          $gambar->move('uploads', $nama_baru);
+          // Masukkan maklumat nama gambar ke array $data
+          $data['gambar'] = $nama_baru;
+        }
         // Dapatkan 1 data sahaja dari maklumat yang dikirim
         // $data = $request->input('no_plat');
         // Dapatkan data yang diperlukan sahaja
@@ -148,7 +210,6 @@ class KenderaanController extends Controller
 
       // Dapatkan maklumat kenderaan berdasarkan ID
       $kenderaan = Kenderaan::find($id);
-
       // Dapatkan semua rekod data KECUALI fail gambar
       $data = $request->except('gambar');
       // Buat semakan adakah wujud fail gambar

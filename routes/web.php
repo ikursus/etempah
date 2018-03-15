@@ -49,7 +49,7 @@ Route::delete('/kenderaan/{id}', 'KenderaanController@destroy')->name('kenderaan
  * Route untuk pengurusan kenderaan
  */
 // Route memaparkan template senarai permohonan
-Route::get('/kenderaan', 'PermohonanController@index')->name('permohonan.index');
+Route::get('/permohonan', 'PermohonanController@index')->name('permohonan.index');
 // Route datatables senarai permohonan
 Route::get('/permohonan/datatables', 'PermohonanController@datatables')->name('permohonan.datatables');
 // Route cari no plat
