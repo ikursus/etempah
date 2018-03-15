@@ -28,8 +28,10 @@ Route::delete('/users/{id}', 'UsersController@destroy')->name('users.destroy');
 /*
  * Route untuk pengurusan kenderaan
  */
-// Route memaparkan senarai users
+// Route memaparkan template senarai users
 Route::get('/kenderaan', 'KenderaanController@index')->name('kenderaan.index');
+// Route datatables senarai users
+Route::get('/kenderaan/datatables', 'KenderaanController@datatables')->name('kenderaan.datatables');
 // Route cari no plat
 Route::get('/kenderaan/find', 'KenderaanController@show')->name('kenderaan.show');
 // Route memaparkan borang tambah user baru
@@ -42,3 +44,23 @@ Route::get('/kenderaan/{id}/edit', 'KenderaanController@edit')->name('kenderaan.
 Route::patch('/kenderaan/{id}/edit', 'KenderaanController@update')->name('kenderaan.update');
 // Route menghapuskan maklumat user
 Route::delete('/kenderaan/{id}', 'KenderaanController@destroy')->name('kenderaan.destroy');
+
+/*
+ * Route untuk pengurusan kenderaan
+ */
+// Route memaparkan template senarai permohonan
+Route::get('/kenderaan', 'PermohonanController@index')->name('permohonan.index');
+// Route datatables senarai permohonan
+Route::get('/permohonan/datatables', 'PermohonanController@datatables')->name('permohonan.datatables');
+// Route cari no plat
+Route::get('/permohonan/find', 'PermohonanController@show')->name('permohonan.show');
+// Route memaparkan borang tambah permohonan baru
+Route::get('/permohonan/add', 'PermohonanController@create')->name('permohonan.create');
+// Route untuk memproses borang tambah permohonan baru
+Route::post('/permohonan/add', 'PermohonanController@store')->name('permohonan.store');
+// Route memaparkan borang edit permohonan
+Route::get('/permohonan/{id}/edit', 'PermohonanController@edit')->name('permohonan.edit');
+// Route memproses borang kemaskini permohonan
+Route::patch('/permohonan/{id}/edit', 'PermohonanController@update')->name('permohonan.update');
+// Route menghapuskan maklumat permohonan
+Route::delete('/permohonan/{id}', 'PermohonanController@destroy')->name('permohonan.destroy');

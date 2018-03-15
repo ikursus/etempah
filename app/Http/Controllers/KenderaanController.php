@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Kenderaan;
+use DataTables;
+use File;
 
 class KenderaanController extends Controller
 {
@@ -17,9 +19,29 @@ class KenderaanController extends Controller
       // Bagi response paparkan template_index.blade.php dari folder
       // resources/views/kenderaan
       $page_title = 'Senarai Kenderaan';
-      $senarai_kenderaan = Kenderaan::all();
 
-      return view('kenderaan/template_index', compact('page_title', 'senarai_kenderaan'));
+      return view('kenderaan/template_index', compact('page_title'));
+    }
+
+
+    public function datatables()
+    {
+      // Dapatkan rekod dari table kenderaan
+      $senarai_kenderaan = Kenderaan::select('id', 'jenis', 'model', 'no_plat', 'gambar', 'status');
+
+      // Return result menerusi DataTables
+      return DataTables::of( $senarai_kenderaan )
+      ->addColumn('tindakan', function($kenderaan) {
+
+        return '
+
+          <a href="'. route('kenderaan.edit', ['id' => $kenderaan->id ]) .'" class="btn btn-sm btn-info">Edit</a>
+
+        ';
+
+      })
+      ->rawColumns(['tindakan'])
+      ->make(true);
     }
 
     /**
@@ -120,13 +142,36 @@ class KenderaanController extends Controller
       $request->validate([
         'jenis' => 'required|min:3',
         'model' => 'required',
-        'status' => 'required|in:available,booked'
+        'status' => 'required|in:available,booked',
+        'gambar' => 'image'
       ]);
-
-      $data = $request->all();
 
       // Dapatkan maklumat kenderaan berdasarkan ID
       $kenderaan = Kenderaan::find($id);
+
+      // Dapatkan semua rekod data KECUALI fail gambar
+      $data = $request->except('gambar');
+      // Buat semakan adakah wujud fail gambar
+      if( $request->hasFile('gambar') )
+      {
+        // Dapatkan maklumat fail gambar
+        $gambar = $request->file('gambar');
+        // Dapatkan NAMA fail gambar tersebut
+        $nama_gambar = $gambar->getClientOriginalName();
+        // Berikan nama baru fail gambar dengan adanya timestamp
+        $nama_baru = date('Y-m-dH-i-S').'-'.$nama_gambar;
+        // Upload gambar ke folder simpanan gambar bernama uploads yang berada di dalam public
+        $gambar->move('uploads', $nama_baru);
+        // Masukkan maklumat nama gambar ke array $data
+        $data['gambar'] = $nama_baru;
+
+        // Semak jika fail lama wujud dalam directory uploads. Jika ada, hapuskan ia
+        if ( File::exists( public_path('uploads/') . $kenderaan->gambar ) )
+        {
+          // Jika fail wujud, delete fail tersebut dari folder uploads yang berada di dalam folder public
+          File::delete( public_path('uploads/') . $kenderaan->gambar );
+        }
+      }
       // Kemaskini rekod ke dalam table kenderaan
       $kenderaan->update($data);
       // Beri response kembali ke halaman sebelum
@@ -141,6 +186,12 @@ class KenderaanController extends Controller
      */
     public function destroy($id)
     {
-        //
+      // DApatkan maklumat kenderaan yang ingin dihapuskan berdasarkan ID
+      $kenderaan = Kenderaan::find($id);
+      // Delete rekod dari table kenderaan
+      $kenderaan->delete();
+      // Bagi response redirect ke halaman senarai kenderaan
+      // return redirect('/kenderaan');
+      return redirect()->route('kenderaan.index')->with('mesej-sukses', 'Data ' . $kenderaan->model . ' berjaya dihapuskan!');
     }
 }
