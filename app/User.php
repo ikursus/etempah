@@ -36,4 +36,19 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function getAuthPassword()
+    {
+      return $this->katalaluan;
+    }
+
+    // Semak ROLE user
+    public function isAdmin()
+    {
+      if ( \Auth::user()->role == 'admin' ){
+        return true;
+      }
+      return false;
+    }
+
 }

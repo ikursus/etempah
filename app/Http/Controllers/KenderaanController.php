@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Kenderaan;
 use DataTables;
 use File;
+use Excel;
 
 class KenderaanController extends Controller
 {
@@ -89,6 +90,7 @@ class KenderaanController extends Controller
 
       })
       ->rawColumns(['gambar','tindakan'])
+      ->addIndexColumn()
       ->make(true);
     }
 
@@ -172,6 +174,42 @@ class KenderaanController extends Controller
 
         // Beri response paparkan tempalte edit maklumat kenderaan
         return view('kenderaan/template_edit', compact('page_title', 'kenderaan'));
+    }
+
+    // Function untuk export data kenderaan kepada file excel
+    public function export()
+    {
+        // Dapatkan rekod data kenderaan dari table kenderaan
+        $senarai_kenderaan = Kenderaan::select('id', 'jenis', 'model', 'no_plat', 'gambar', 'created_at')->get();
+        // Panggil function untuk export fail Excel
+        // Excel::create('rekod_kenderaan', function($excel) use( $senarai_kenderaan ) {
+        //
+        //     $excel->sheet('Sheet 1', function( $sheet ) use( $senarai_kenderaan ) {
+        //         $sheet->fromArray($senarai_kenderaan);
+        //     });
+        //
+        // })
+        // ->export('xls');
+
+        // Untuk customize label data nama column pada excel
+        $array_kenderaan = [];
+        // Tetapkan label nama yang menggantikan nama column
+        $array_kenderaan[] = ['ID', 'JENIS KENDERAAN', 'MODEL KENDERAAN', 'NO PLAT KENDERAAN', 'NAMA FAIL GAMBAR', 'TARIKH DATA DIMASUKKAN'];
+        // Buatkan loop untuk setiap rekod kenderaan
+        foreach( $senarai_kenderaan as $kenderaan )
+        {
+          $array_kenderaan[] = $kenderaan->toArray();
+        }
+        // Panggil function untuk export fail Excel
+        Excel::create('rekod_kenderaan', function($excel) use( $array_kenderaan ) {
+
+            $excel->sheet('Sheet 1', function( $sheet ) use( $array_kenderaan ) {
+                $sheet->fromArray($array_kenderaan, null, 'A1', false, false);
+            });
+
+        })
+        ->export('csv');
+
     }
 
     /**

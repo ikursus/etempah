@@ -4,12 +4,14 @@
 @include('layouts/alerts')
 <p>
   <a href="{{ route('kenderaan.create') }}" class="btn btn-primary">Tambah</a>
+  <a href="{{ route('kenderaan.export') }}" class="btn btn-warning">Export</a>
 </p>
 
 <table class="table table-bordered" id="kenderaan-table">
 
   <thead>
     <tr>
+      <th>BIL</th>
       <th>ID</th>
       <th>JENIS</th>
       <th>MODEL</th>
@@ -33,6 +35,7 @@ $(function() {
         serverSide: true,
         ajax: '{!! route('kenderaan.datatables') !!}',
         columns: [
+            { data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false},
             { data: 'id', name: 'id' },
             { data: 'jenis', name: 'jenis' },
             { data: 'model', name: 'model' },

@@ -34,18 +34,21 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        <li><a class="nav-link" href="/dashboard">Dashboard</a></li>
-                        <li><a class="nav-link" href="/users">Users</a></li>
-                        <li><a class="nav-link" href="/permohonan">Permohonan</a></li>
-                        <li><a class="nav-link" href="/kenderaan">Kenderaan</a></li>
+
                         @guest
                             <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                             <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                         @else
+                            <!-- Authentication Links -->
+                            <li><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                            <li><a class="nav-link" href="/users">Users</a></li>
+                            @if ( Auth::user()->role == 'admin' )
+                            <li><a class="nav-link" href="/permohonan">Permohonan</a></li>
+                            @endif
+                            <li><a class="nav-link" href="/kenderaan">Kenderaan</a></li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    {{ Auth::user()->nama }} <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
