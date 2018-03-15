@@ -9,6 +9,7 @@
     {{ csrf_field() }}
     @csrf
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="_method" value="PATCH">
 
     <div class="form-group row">
         <label for="jenis" class="col-md-4 col-form-label text-md-right">{{ __('JENIS') }}</label>
@@ -72,7 +73,7 @@
     <div class="form-group row mb-0">
         <div class="col-md-6 offset-md-4">
             <button type="submit" class="btn btn-primary">
-                {{ __('Tambah') }}
+                {{ __('Kemaskini') }}
             </button>
         </div>
     </div>

@@ -80,10 +80,10 @@ class KenderaanController extends Controller
         //$kenderaan = Kenderaan::where('no_plat', 'like', $data.'%')->first();
         // Dapatkan 1 data yang mempunyai keyword yang ditaip
         $kenderaan = Kenderaan::where('no_plat', 'like', $data)->first();
-
+        // Sekiranya tidak wujud rekod, kembali ke halaman senarai kenderaan
         if( ! count( $kenderaan ) )
         {
-          return redirect()->back();
+          return redirect()->back()->with('mesej-gagal', 'Tiada rekod dijumpai');
         }
 
         // Beri response paparkan tempalte edit maklumat kenderaan
@@ -115,9 +115,22 @@ class KenderaanController extends Controller
      */
     public function update(Request $request, $id)
     {
+      // Form validation
+      // $this->validate($request, []);
+      $request->validate([
+        'jenis' => 'required|min:3',
+        'model' => 'required',
+        'status' => 'required|in:available,booked'
+      ]);
+
       $data = $request->all();
 
-      return $data;
+      // Dapatkan maklumat kenderaan berdasarkan ID
+      $kenderaan = Kenderaan::find($id);
+      // Kemaskini rekod ke dalam table kenderaan
+      $kenderaan->update($data);
+      // Beri response kembali ke halaman sebelum
+      return redirect()->back()->with('mesej-sukses', 'Rekod berjaya dikemaskini!');
     }
 
     /**

@@ -1,7 +1,7 @@
 @extends('layouts/app')
 
 @section('content')
-
+@include('layouts/alerts')
 <p>
   <a href="{{ route('kenderaan.create') }}" class="btn btn-primary">Tambah</a>
 </p>
