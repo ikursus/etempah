@@ -249,6 +249,12 @@ class KenderaanController extends Controller
     {
       // DApatkan maklumat kenderaan yang ingin dihapuskan berdasarkan ID
       $kenderaan = Kenderaan::find($id);
+      // Semak jika fail gambar wujud dalam directory uploads. Jika ada, hapuskan ia
+      if ( File::exists( public_path('uploads/') . $kenderaan->gambar ) )
+      {
+        // Jika fail wujud, delete fail tersebut dari folder uploads yang berada di dalam folder public
+        File::delete( public_path('uploads/') . $kenderaan->gambar );
+      }
       // Delete rekod dari table kenderaan
       $kenderaan->delete();
       // Bagi response redirect ke halaman senarai kenderaan
