@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 
+
 class UsersController extends Controller
 {
     /**
@@ -18,7 +19,7 @@ class UsersController extends Controller
         // resources/views/users
         $page_title = 'Senarai Users';
         // Dapatkan SEMUA rekod data dari table users
-        $senarai_users = DB::table('users')->get();
+        // $senarai_users = DB::table('users')->get();
         // Dapatkan data berdasarkan no kp
         // $senarai_users = DB::table('users')
         // ->where('id', '=', '1')
@@ -168,6 +169,11 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Dapatkan rekod data user yang ingin dihapuskan berdasarkan ID
+        DB::table('users')->where('id', '=', $id)->delete();
+        // Bagi response redirect ke halaman senarai users
+        // return redirect('/users');
+        return redirect()->route('users.index')->with('mesej-sukses', 'Data berjaya dihapuskan!');
+
     }
 }

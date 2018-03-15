@@ -7,6 +7,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    // Maklumkan maklumat table yang perlu dihubungi
+    protected $table = 'users';
+
     use Notifiable;
 
     /**
@@ -15,7 +18,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+      'username',
+      'email',
+      'no_kp',
+      'nama',
+      'telefon',
+      'status',
+      'role',
+      'password'
     ];
 
     /**

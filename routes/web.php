@@ -30,6 +30,8 @@ Route::delete('/users/{id}', 'UsersController@destroy')->name('users.destroy');
  */
 // Route memaparkan senarai users
 Route::get('/kenderaan', 'KenderaanController@index')->name('kenderaan.index');
+// Route cari no plat
+Route::get('/kenderaan/find', 'KenderaanController@show')->name('kenderaan.show');
 // Route memaparkan borang tambah user baru
 Route::get('/kenderaan/add', 'KenderaanController@create')->name('kenderaan.create');
 // Route untuk memproses borang tambah user baru

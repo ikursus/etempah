@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Kenderaan;
 
 class KenderaanController extends Controller
 {
@@ -16,11 +17,7 @@ class KenderaanController extends Controller
       // Bagi response paparkan template_index.blade.php dari folder
       // resources/views/kenderaan
       $page_title = 'Senarai Kenderaan';
-      $senarai_kenderaan = [
-          ['id' => 1, 'model' => 'Proton Wira', 'no_plat' => 'WXB 8888', 'status' => 'Available'],
-          ['id' => 2, 'model' => 'Toyota Hilux', 'no_plat' => 'VA 3388', 'status' => 'Booked'],
-          ['id' => 3, 'model' => 'Proton Exora', 'no_plat' => 'PNG 6666', 'status' => 'Available']
-      ];
+      $senarai_kenderaan = Kenderaan::all();
 
       return view('kenderaan/template_index', compact('page_title', 'senarai_kenderaan'));
     }
@@ -63,8 +60,10 @@ class KenderaanController extends Controller
         // $data = $request->only('status', 'no_plat');
         // Dapatkan semua data KECUALI yang dinyatakan
         // $data = $request->except('no_plat');
-
-        return $data;
+        // Simpan data ke dalam table kenderaan
+        Kenderaan::create($data);
+        // Beri response kembali ke halaman senarai kenderaan
+        return redirect()->route('kenderaan.index')->with('mesej-sukses', 'Rekod berjaya ditambah!');
     }
 
     /**
@@ -73,9 +72,22 @@ class KenderaanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        $data = $request->input('no_plat');
+
+        // Dapatkan senarai data yang mempunyai ciri ciri keyword yanng ditaip
+        //$kenderaan = Kenderaan::where('no_plat', 'like', $data.'%')->first();
+        // Dapatkan 1 data yang mempunyai keyword yang ditaip
+        $kenderaan = Kenderaan::where('no_plat', 'like', $data)->first();
+
+        if( ! count( $kenderaan ) )
+        {
+          return redirect()->back();
+        }
+
+        // Beri response paparkan tempalte edit maklumat kenderaan
+        return view('kenderaan/template_edit', compact('page_title', 'kenderaan'));
     }
 
     /**
@@ -87,8 +99,11 @@ class KenderaanController extends Controller
     public function edit($id)
     {
       // Tajuk Halaman
-      $page_title = 'Borang Edit Kenderaan ID: ' . $id;
-      return view('kenderaan/template_edit', compact('page_title'));
+      $page_title = 'Borang Edit Kenderaan';
+      // Dapatkan maklumat kenderaan berdasarkan ID
+      $kenderaan = Kenderaan::find($id);
+      // Beri response paparkan tempalte edit maklumat kenderaan
+      return view('kenderaan/template_edit', compact('page_title', 'kenderaan'));
     }
 
     /**

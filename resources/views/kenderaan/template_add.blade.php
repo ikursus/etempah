@@ -57,7 +57,7 @@
 
         <div class="col-md-6">
             <select name="status" class="form-control">
-              <option value="pending">Available</option>
+              <option value="available">Available</option>
               <option value="booked">Booked</option>
             </select>
 
